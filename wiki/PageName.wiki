@@ -12,7 +12,7 @@
 == Potential Features and Feature Requests ==
 
   * Optionally print formatted text to GamePak memory for further debugging.
-
+  * The character set should go in ewram.
 
 
 
