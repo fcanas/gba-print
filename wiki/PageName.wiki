@@ -1,9 +1,10 @@
-#summary Feedback for gba-print.
+#summary gba-print.
 
 = Introduction =
 
-This is a very new project. Please let me know what direction to take this to make it most useful.
+`gba-print` is a very new project. I made it because I don't want to use game engines or libraries in my GBA code. They all seem to do more than I need. I think my goal is to make a collection of utilities to use from _within_ a GBA program. Ideally they would all be independent of each-other, as I am not aiming to make a library. Please let me know what direction to take this to make it most useful. What is your GBA dream tool?
+
 
 = News =
 
-  * The program is posted and is in a completely functional state.
+  * The printing program is posted and is in a completely functional state.
