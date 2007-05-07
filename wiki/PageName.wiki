@@ -9,10 +9,9 @@
 
   * The source is posted and is in a completely functional state.
 
-== Potential Features and Feature Requests ==
+== Potential Features ==
 
   * Optionally print formatted text to GamePak memory for further debugging.
   * The character set should go in ewram.
-
 
 
