@@ -1,4 +1,5 @@
 #summary gba-print Main wiki page.
+#labels Featured
 
 = Introduction =
 
