@@ -14,3 +14,10 @@
 
   * Optionally print formatted text to GamePak memory for further debugging.
   * The character set should go in ewram.
+
+
+For feedback email the project's owner @gmail.com
+
+
+
+
