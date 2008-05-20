@@ -3,7 +3,7 @@
 
 = Introduction =
 
-`gba-print` is a very new project. I made it because I don't want to use game engines or libraries in my GBA code. They all seem to do more than I need. I think my goal is to make a collection of utilities to use from _within_ a GBA program. Ideally they would all be independent of each-other, as I am not aiming to make a library. Please let me know what direction to take this to make it most useful. What is your GBA dream tool?
+`gba-print` is a small tool I wrote over a year ago. I made it because I don't want to use game engines or libraries in my GBA code, but wanted an easy way to print text for debugging. The available libraries all seem to do more than I need. I think my goal is to make a collection of utilities to use from _within_ a GBA program. Ideally they would all be independent of each-other, as I am not aiming to make a library. Please let me know what direction to take this to make it most useful. What is your GBA dream tool?
 
 
 = News =
@@ -12,12 +12,10 @@
 
 == Potential Features ==
 
-  * Optionally print formatted text to GamePak memory for further debugging.
+  * Optionally print formatted text to GamePak memory for further use as a debugging tool.
   * The character set should go in ewram.
 
 
 For feedback email the project's owner @gmail.com
-
-
 
 
