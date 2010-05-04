@@ -1,5 +1,5 @@
 /* printf - Format and print strings to GBA the screen.
-   Copyright (C) 2007  Fabian Canas
+   Copyright (C) 2007-2010  Fabian Canas
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -35,16 +35,7 @@ typedef struct{
 
 printf_screen_t* printf_gScreen;
 
-/*
-u16 charFinger;
-u16 rowFinger;
-u16* ScreenBB;
-
-u16 scrollOffset;
-u16 scrollingFlag;
-u16 BGNum;
-*/
-
+// Fast hardware Direct Memory Access bulk transfer function.
 static void DMACopy(void* source,void* dest,unsigned int count,unsigned int mode) { 
    if (mode == DMA_16NOW || mode == DMA_32NOW) { 
       REG_DMA3SAD = (unsigned int)source;
@@ -84,6 +75,8 @@ static void nextRow(){
    printf_gScreen->rowFinger++;
 }
 
+
+// Prints a single character at the next available position on the screen.
 static void printchar(char c){
    if (c>31) c = c - 31;
    else if(c==10) {
@@ -118,6 +111,9 @@ static void printchar(char c){
    }
 }
 
+// Function to reverse a C-string. 
+// Passed by reference. Original string is modified.
+// Particularly useful for number conversion.
 static void reverseString(char* c, int size) {
    char r[size];
    int i;
@@ -132,6 +128,7 @@ static void reverseString(char* c, int size) {
    }
 }
 
+// Given an integer, converts it to a C-String of a given base.
 static void intToCharP(unsigned int i, char* c, int base){
    int j=0;
    while(i != 0){
@@ -155,6 +152,7 @@ static void printBase(int i, int base){
    print_f(num);
 }
 
+// Actual printf function. Used print_f for "namespace" issues.
 void print_f(char *fmt, ...){
    char *p; //Critical for this to be the first line (bad hack)
    int i;
@@ -162,8 +160,11 @@ void print_f(char *fmt, ...){
    char fmtbuf[256];
    int argNum = 9; //More of that bad hack: 9th memory location after first var
                    //is the second argument. 
-
+   // Loop through string until null termination is found.
    for(p = fmt; *p != '\0'; p++){
+     // Checks for a % character and reads the next character to then
+     // see how to treat the next argument.
+     // When one is encountered, the argument is dealth with and argNum is incremented.
       if (*p == 37){
          p++;
          switch(*p){
@@ -213,6 +214,9 @@ void print_f(char *fmt, ...){
                printchar('%');
                break;
             default: printchar('Z');
+            // This default is here, partially for debugging purposes.
+            // A well-constructed format string shouldn't ever produce
+            // this output. Appropriate error handling could be implemented.
          }
       } else {
          printchar(*p);
@@ -220,7 +224,7 @@ void print_f(char *fmt, ...){
    }
 }
 
-// ScreenBB, Background Number (0-3), charbb
+// ScreenBB, Background Number (0-3), charbb (BB means BaseBlock)
 void initTextBG(u16 screenBB, u16 bgNum, u16 charBlock){
    
    printf_gScreen = (printf_screen_t*) malloc(sizeof(printf_screen_t));
@@ -254,10 +258,13 @@ void initTextBG(u16 screenBB, u16 bgNum, u16 charBlock){
          REG_BG3CNT = (BG_COLOR_16 | shape | screenBB<<SCREEN_SHIFT | charBlock<<CHAR_SHIFT);
          break;
    }
-      
-   DMACopy((void*) alphabet_Pallete, (void*) BG_PaletteMem, 3, DMA_16NOW);
    
+   // Copy colors for the letters. Very small.
+   DMACopy((void*) alphabet_Pallete, (void*) BG_PaletteMem, 3, DMA_16NOW);
+   // Copy the actual character images.
    DMACopy((void*) numbers, (void*) (CharBB+16), 1584, DMA_16NOW);
+   
+   // Initialize all the counters
    printf_gScreen->charFinger = 0;
    printf_gScreen->rowFinger = 0;
    printf_gScreen->scrollingFlag = 0;
@@ -267,7 +274,7 @@ void initTextBG(u16 screenBB, u16 bgNum, u16 charBlock){
    setOffset();
    
    int x, y;
-   //clear screen
+   // Clear screen
    for(y=0; y<31; y++){
       for(x=0; x<31; x++){
          printf_gScreen->ScreenBB[x + (y<<5)] = 1;
